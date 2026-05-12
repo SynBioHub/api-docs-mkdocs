@@ -1,20 +1,12 @@
-FROM python:3.11-slim
+# Use the official Material for MkDocs image
+FROM squidfunk/mkdocs-material
 
-# Install uv
-RUN pip install uv
+# Set a working directory for our application files
+WORKDIR /docs
 
-WORKDIR /app
+# Copy requirements.txt first
+COPY requirements.txt .
 
-# Copy pyproject.toml and related files
-COPY pyproject.toml uv.lock ./
-
-# Install dependencies using uv
-RUN uv sync --frozen
-
-# Copy the rest of the project
-COPY . .
-
-EXPOSE 8000
-
-# Run mkdocs server
-CMD ["uv", "run", "mkdocs", "serve", "-a", "0.0.0.0:8000"]
+# Install Python dependencies
+# Use --no-cache-dir to keep the image size smaller.
+RUN pip install --no-cache-dir -r requirements.txt
