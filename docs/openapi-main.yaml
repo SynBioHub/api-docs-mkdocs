@@ -2,13 +2,188 @@ openapi: 3.0.0
 info:
   title: SynBioHub Main API
   version: 1.0.0
-  description: Main API endpoints for SynBioHub
+  description: 'Main API endpoints for SynBioHub
+
+
+    Supplementary guides for complex concepts:
+
+    - [External Remotes](concepts/remotes.md)
+
+    - [SynBioHub Plugins](concepts/plugins.md)'
 servers:
 - url: https://synbiohub.org
   description: Main SynBioHub instance
 - url: http://localhost:7777
   description: Local development instance
 paths:
+  /login:
+    post:
+      summary: "Login"
+      description: "Authenticates a user. Requires email (or username) and password. Returns a user token to be passed in the X-authorization header."
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - email
+              - password
+      responses:
+        '200':
+          description: "Login successful, returns user token"
+          content:
+            text/plain:
+              schema:
+                type: string
+        '401':
+          description: "Unauthorized - invalid credentials"
+      tags:
+      - User Account
+  /logout:
+    post:
+      summary: "Logout"
+      description: "Logs out the user specified in the X-authorization header. Note that the actual controller endpoint is /do_logout."
+      security:
+      - userToken: []
+      responses:
+        '200':
+          description: "Logout successful"
+        '401':
+          description: "Unauthorized - invalid or missing token"
+      tags:
+      - User Account
+  /register:
+    post:
+      summary: "Register"
+      description: "Register a new user on SynBioHub."
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                affiliation:
+                  type: string
+              required:
+              - username
+              - name
+              - email
+              - password
+      responses:
+        '200':
+          description: "Registration successful"
+        '400':
+          description: "Bad request - invalid input or user already exists"
+      tags:
+      - User Account
+  /resetPassword:
+    post:
+      summary: "Request Reset Password Token"
+      description: "Request a reset password token. (Note: Currently no implementation code)."
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                  description: "The username or email of the user"
+              required:
+              - user
+      responses:
+        '200':
+          description: "Reset token requested (if user exists)"
+      tags:
+      - User Account
+  /setNewPassword:
+    post:
+      summary: "Set New Password"
+      description: "Resets the user's password with the provided token and two copies of the new password. (Note: Currently no implementation code)."
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+                passwordConfirm:
+                  type: string
+              required:
+              - token
+              - password
+              - passwordConfirm
+      responses:
+        '200':
+          description: "Password reset successful"
+        '400':
+          description: "Bad request - invalid token or passwords do not match"
+      tags:
+      - User Account
+  /profile:
+    get:
+      summary: "View Profile"
+      description: "View the user's profile. Requires X-authorization header."
+      security:
+      - userToken: []
+      responses:
+        '200':
+          description: "User profile information"
+          content:
+            application/json:
+              schema:
+                type: object
+        '401':
+          description: "Unauthorized - invalid or missing token"
+      tags:
+      - User Account
+    post:
+      summary: "Update Profile"
+      description: "Update the user's profile. Requires X-authorization header. Currently only updates name, email, and affiliation."
+      security:
+      - userToken: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                affiliation:
+                  type: string
+      responses:
+        '200':
+          description: "Profile updated successfully"
+        '401':
+          description: "Unauthorized - invalid or expired session"
+      tags:
+      - User Account
   /admin/remotes:
     get:
       summary: View Remotes
@@ -34,8 +209,8 @@ paths:
       - Remotes Management
   /admin/saveRemote:
     post:
-      summary: Save Benchling Remote
-      description: Save a new Benchling remote repository
+      summary: Save Remote (Benchling or ICE)
+      description: Save a new Benchling or ICE remote repository
       security:
       - userToken: []
       requestBody:
@@ -49,103 +224,27 @@ paths:
                   type: string
                   enum:
                   - benchling
-                  description: Type of the remote (Benchling)
+                  - ice
+                  description: Type of the remote (Benchling or ICE)
                 id:
                   type: string
-                  description: Id of the Benchling remote
+                  description: Id of the remote
                 url:
                   type: string
                   format: uri
-                  description: URL for the Benchling remote
+                  description: URL for the remote
                 benchlingApiToken:
                   type: string
-                  description: API token for the Benchling remote
-                rejectUnauthorized:
-                  type: string
-                  enum:
-                  - 'true'
-                  - 'false'
-                  description: Whether to check SSL certificate
-                  default: 'true'
-                folderPrefix:
-                  type: string
-                  description: Prefix to use for folders on Benchling
-                sequenceSuffix:
-                  type: string
-                  description: Suffix to use for sequences found on Benchling
-                defaultFolderId:
-                  type: string
-                  description: Default folder on Benchling to access
-                isPublic:
-                  type: string
-                  enum:
-                  - 'true'
-                  - 'false'
-                  description: Should the remote be visible publicly?
-                  default: 'true'
-                rootCollectionDisplayId:
-                  type: string
-                  description: Display id for the root collection on the remote
-                rootCollectionName:
-                  type: string
-                  description: Name for the root collection on the remote
-                rootCollectionDescription:
-                  type: string
-                  description: Description for the root collection on the remote
-              required:
-              - type
-              - id
-              - benchlingApiToken
-            example:
-              type: benchling
-              id: my-benchling
-              url: https://benchling.com
-              benchlingApiToken: sk_live_...
-              isPublic: 'true'
-      responses:
-        '200':
-          description: Remote saved successfully
-        '401':
-          description: Unauthorized - invalid or missing token
-        '403':
-          description: Forbidden - user is not an administrator
-      tags:
-      - Remotes Management
-  /admin/saveRemote/ice:
-    post:
-      summary: Save ICE Remote
-      description: Save a new ICE remote repository
-      security:
-      - userToken: []
-      operationId: saveIceRemote
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                type:
-                  type: string
-                  enum:
-                  - ice
-                  description: Type of the remote (ICE)
-                id:
-                  type: string
-                  description: Id of the ICE remote
-                url:
-                  type: string
-                  format: uri
-                  description: URL for the ICE remote
+                  description: API token for the Benchling remote (required if type is benchling)
                 iceApiTokenClient:
                   type: string
-                  description: ICE API token client
+                  description: ICE API token client (required if type is ice)
                 iceApiToken:
                   type: string
-                  description: ICE API token
+                  description: ICE API token (required if type is ice)
                 iceApiTokenOwner:
                   type: string
-                  description: ICE API token owner
+                  description: ICE API token owner (required if type is ice)
                 iceCollection:
                   type: string
                   description: ICE collection
@@ -158,23 +257,23 @@ paths:
                   default: 'true'
                 folderPrefix:
                   type: string
-                  description: Prefix to use for folders on ICE
+                  description: Prefix to use for folders on the remote
                 sequenceSuffix:
                   type: string
-                  description: Suffix to use for sequences found on ICE
+                  description: Suffix to use for sequences found on the remote
                 defaultFolderId:
                   type: string
-                  description: Default folder on ICE to access
+                  description: Default folder on the remote to access
                 groupId:
                   type: string
                   description: Group id on ICE
                 pi:
                   type: string
-                  description: Principal Investigator name
+                  description: Principal Investigator name (ICE)
                 piEmail:
                   type: string
                   format: email
-                  description: Principal Investigator email
+                  description: Principal Investigator email (ICE)
                 isPublic:
                   type: string
                   enum:
@@ -184,7 +283,7 @@ paths:
                   default: 'true'
                 partNumberPrefix:
                   type: string
-                  description: Prefix to use for parts
+                  description: Prefix to use for parts (ICE)
                 rootCollectionDisplayId:
                   type: string
                   description: Display id for the root collection on the remote
@@ -197,10 +296,6 @@ paths:
               required:
               - type
               - id
-              - url
-              - iceApiTokenClient
-              - iceApiToken
-              - iceApiTokenOwner
       responses:
         '200':
           description: Remote saved successfully
@@ -273,7 +368,7 @@ paths:
           description: Forbidden - user does not have permission
       tags:
       - Permission
-  /{uri}/removeOwner:
+  /{uri}/removeOwner/{username}:
     post:
       summary: Remove Owner
       description: Remove an owner from an object
@@ -284,20 +379,14 @@ paths:
         schema:
           type: string
         description: The URI of the object
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The username of the owner being removed
       security:
       - userToken: []
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                user:
-                  type: string
-                  description: The username of the owner being removed
-              required:
-              - user
       responses:
         '200':
           description: Owner removed successfully
@@ -1628,25 +1717,18 @@ paths:
       tags:
       - Administration
   /admin/sparql:
-    post:
+    get:
       summary: SPARQL Admin Query
       description: Execute a SPARQL admin query
+      parameters:
+      - name: query
+        in: query
+        required: true
+        schema:
+          type: string
+        description: The SPARQL query to execute
       security:
       - userToken: []
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                query:
-                  type: string
-                  description: The SPARQL query to execute
-              required:
-              - query
-            example:
-              query: SELECT * WHERE { ?s ?p ?o } LIMIT 10
       responses:
         '200':
           description: Query results in JSON format
@@ -1660,7 +1742,7 @@ paths:
           description: Forbidden - user is not an admin
       tags:
       - Administration
-  /virtuosoStatus:
+  /admin/virtuoso:
     get:
       summary: Get Virtuoso Status
       description: Returns 200 when Virtuoso is alive and 500 when it is not
@@ -1677,7 +1759,7 @@ paths:
           description: Virtuoso is not alive
       tags:
       - Administration
-  /graphs:
+  /admin/graphs:
     get:
       summary: View Graphs
       description: Returns existing graphs and their number of triples
@@ -1696,7 +1778,7 @@ paths:
           description: Forbidden - user is not an admin
       tags:
       - Administration
-  /log:
+  /admin/log:
     get:
       summary: View Log
       description: Returns the SynBioHub log file
@@ -1791,6 +1873,7 @@ paths:
           description: Forbidden - user is not an admin
       tags:
       - Plugin Administration
+  /admin/savePlugin:
     post:
       summary: Save Plugin
       description: Save a new plugin
@@ -1888,6 +1971,7 @@ paths:
           description: Forbidden - user is not an admin
       tags:
       - Registry Administration
+  /admin/saveRegistry:
     post:
       summary: Save Registry
       description: Save a new registry
@@ -1920,24 +2004,6 @@ paths:
       tags:
       - Registry Administration
   /admin/explorer:
-    get:
-      summary: View SBOLExplorer Config
-      description: View the current SBOLExplorer configuration
-      security:
-      - userToken: []
-      responses:
-        '200':
-          description: Current SBOLExplorer configuration
-          content:
-            text/plain:
-              schema:
-                type: string
-        '401':
-          description: Unauthorized - invalid or missing token
-        '403':
-          description: Forbidden - user is not an admin
-      tags:
-      - SBOLExplorer
     post:
       summary: Update SBOLExplorer Config
       description: Update the SBOLExplorer configuration
@@ -2009,25 +2075,6 @@ paths:
       responses:
         '200':
           description: SBOLExplorer log contents
-          content:
-            text/plain:
-              schema:
-                type: string
-        '401':
-          description: Unauthorized - invalid or missing token
-        '403':
-          description: Forbidden - user is not an admin
-      tags:
-      - SBOLExplorer
-  /admin/explorerIndexingLog:
-    get:
-      summary: View SBOLExplorer Indexing Log
-      description: View the SBOLExplorer index log
-      security:
-      - userToken: []
-      responses:
-        '200':
-          description: SBOLExplorer indexing log contents
           content:
             text/plain:
               schema:
@@ -2283,17 +2330,10 @@ paths:
           description: Forbidden - user is not an admin
       tags:
       - User Administration
-  /{uri}/updateMutableDescription:
+  /updateMutableDescription:
     post:
       summary: Edit Mutable Description
       description: Edit the mutable description of an object
-      parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the object to update
       security:
       - userToken: []
       requestBody:
@@ -2303,10 +2343,14 @@ paths:
             schema:
               type: object
               properties:
+                uri:
+                  type: string
+                  description: The URI of the object to update
                 value:
                   type: string
                   description: The new value for the mutable description
               required:
+              - uri
               - value
       responses:
         '200':
@@ -2317,17 +2361,10 @@ paths:
           description: Forbidden - user is not an owner of this object
       tags:
       - Edit
-  /{uri}/updateMutableNotes:
+  /updateMutableNotes:
     post:
       summary: Edit Mutable Notes
       description: Edit the mutable notes of an object
-      parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the object to update
       security:
       - userToken: []
       requestBody:
@@ -2337,10 +2374,14 @@ paths:
             schema:
               type: object
               properties:
+                uri:
+                  type: string
+                  description: The URI of the object to update
                 value:
                   type: string
                   description: The new value for the mutable notes
               required:
+              - uri
               - value
       responses:
         '200':
@@ -2351,17 +2392,10 @@ paths:
           description: Forbidden - user is not an owner of this object
       tags:
       - Edit
-  /{uri}/updateMutableSource:
+  /updateMutableSource:
     post:
       summary: Edit Mutable Source
       description: Edit the mutable source of an object
-      parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the object to update
       security:
       - userToken: []
       requestBody:
@@ -2371,10 +2405,14 @@ paths:
             schema:
               type: object
               properties:
+                uri:
+                  type: string
+                  description: The URI of the object to update
                 value:
                   type: string
                   description: The new value for the mutable source
               required:
+              - uri
               - value
       responses:
         '200':
@@ -2385,17 +2423,10 @@ paths:
           description: Forbidden - user is not an owner of this object
       tags:
       - Edit
-  /{uri}/updateCitations:
+  /updateCitations:
     post:
       summary: Edit Citations
       description: Edit the citations of an object
-      parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the object to update
       security:
       - userToken: []
       requestBody:
@@ -2405,10 +2436,14 @@ paths:
             schema:
               type: object
               properties:
+                uri:
+                  type: string
+                  description: The URI of the object to update
                 value:
                   type: string
                   description: The new value for the citation
               required:
+              - uri
               - value
       responses:
         '200':
@@ -2422,7 +2457,7 @@ paths:
   /{uri}/edit/{field}:
     post:
       summary: Edit Field
-      description: Edit a field of an object
+      description: Edit a field of an object. Note that the actual controller endpoint name is /editField.
       parameters:
       - name: uri
         in: path
@@ -2476,7 +2511,7 @@ paths:
   /{uri}/add/{field}:
     post:
       summary: Add Field
-      description: Add a field to an object
+      description: Add a field to an object. Note that the actual controller endpoint name is /addField.
       parameters:
       - name: uri
         in: path
@@ -2524,7 +2559,7 @@ paths:
   /{uri}/remove/{field}:
     post:
       summary: Remove Field
-      description: Remove a field from an object
+      description: Remove a field from an object. Note that the actual controller endpoint name is /removeField.
       parameters:
       - name: uri
         in: path
@@ -2579,15 +2614,26 @@ components:
       name: X-authorization
       description: Authentication token with admin privileges
 tags:
+- name: User Account
 - name: Theme Administration
 - name: Download
 - name: Permission
 - name: SBOLExplorer
 - name: Remotes Management
+  description: Manage connections to external repositories. See the [Remotes Guide](concepts/remotes.md)
+    for more details.
+  externalDocs:
+    description: Remotes Concept Guide
+    url: concepts/remotes.md
 - name: Administration
 - name: Registry Administration
 - name: Registry Management
 - name: Plugin Administration
+  description: Manage SynBioHub plugins. See the [Plugins Guide](concepts/plugins.md)
+    for more details.
+  externalDocs:
+    description: Plugins Concept Guide
+    url: concepts/plugins.md
 - name: Search
 - name: Submission
 - name: Attachment
