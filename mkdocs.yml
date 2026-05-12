@@ -1,0 +1,26 @@
+site_name: SynBioHub API Docs
+
+theme:
+  name: material
+
+plugins:
+  - search
+  - neoteroi.mkdocsoad:
+      use_pymdownx: true
+
+markdown_extensions:
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+extra_css:
+  - css/mkdocsoad.css
+
+nav:
+  - Home: index.md
+  - Main API: openapi-main.md
+  - Plugins API: openapi-plugins.md
+
+watch:
+  - docs

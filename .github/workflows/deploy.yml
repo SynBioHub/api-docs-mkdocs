@@ -21,9 +21,10 @@ jobs:
       - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
       - uses: actions/cache@v4
         with:
-          key: zensical-${{ env.cache_id }}
+          key: mkdocs-material-${{ env.cache_id }}
           path: .cache
           restore-keys: |
-            zensical-
-      - run: pip install zensical
-      - run: zensical gh-deploy --force
+            mkdocs-material-
+      - run: pip install mkdocs-material neoteroi-mkdocs
+      - run: pip install --no-cache-dir -r requirements.txt
+      - run: mkdocs gh-deploy --force

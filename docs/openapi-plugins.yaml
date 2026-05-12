@@ -1,0 +1,385 @@
+openapi: 3.0.0
+info:
+  title: SynBioHub Plugins API
+  version: 1.0.0
+  description: Plugin-related API endpoints for SynBioHub
+servers:
+- url: https://synbiohub.org
+  description: Main SynBioHub instance
+- url: http://localhost:7777
+  description: Local development instance
+paths:
+  /status:
+    get:
+      summary: Plugin Status
+      description: 'Checks if the plugin is operational.  SynBioHub polls this endpoint
+        to verify the plugin is up.
+
+        '
+      responses:
+        '200':
+          description: Plugin is running
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: The plugin is up and running
+  /evaluate:
+    post:
+      summary: Evaluate Request
+      description: 'Determines if the plugin can handle the incoming request.  SynBioHub
+        sends metadata about the object or file to this endpoint. Return 200 if the
+        plugin can process it, or 415 if it cannot.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: The RDF type of the object (e.g., ComponentDefinition,
+                    Collection)
+                url:
+                  type: string
+                  description: The URL of the object in SynBioHub
+                filename:
+                  type: string
+                  description: Name of the file (for submission plugins)
+      responses:
+        '200':
+          description: Plugin can handle the request
+        '415':
+          description: Plugin cannot handle the request
+  /run:
+    post:
+      summary: Run Plugin
+      description: 'Executes the plugin logic. SynBioHub sends the actual data or
+        location of the data to this endpoint.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: The URL of the object
+                complete_sbol:
+                  type: string
+                  description: URL to fetch the complete SBOL data
+                params:
+                  type: object
+                  description: Any additional parameters passed from the frontend
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: The uploaded file (for submission plugins)
+                params:
+                  type: object
+                  description: Any additional parameters
+      responses:
+        '200':
+          description: Plugin execution successful
+          content:
+            application/json:
+              schema:
+                type: object
+                description: JSON response (e.g., for submission plugins)
+            text/html:
+              schema:
+                type: string
+                description: HTML content (for visualization plugins)
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+                description: File download (for download plugins)
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+  /plugins/download:
+    get:
+      summary: List Download Plugins
+      description: Returns a list of available download plugins
+      security:
+      - userToken: []
+      - {}
+      responses:
+        '200':
+          description: List of download plugins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    url:
+                      type: string
+              example: &id001
+              - id: example-plugin
+                name: Example Plugin
+                url: https://plugins.synbiohub.org/example
+                category: rendering
+      tags:
+      - Plugins
+  /plugins/visualization:
+    get:
+      summary: List Visualization Plugins
+      description: Returns a list of available visualization plugins
+      security:
+      - userToken: []
+      - {}
+      responses:
+        '200':
+          description: List of visualization plugins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    url:
+                      type: string
+                    category:
+                      type: string
+              example: *id001
+      tags:
+      - Plugins
+  /plugins/submission:
+    get:
+      summary: List Submission Plugins
+      description: Returns a list of available submission plugins
+      security:
+      - userToken: []
+      - {}
+      responses:
+        '200':
+          description: List of submission plugins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    url:
+                      type: string
+              example: *id001
+      tags:
+      - Plugins
+  /plugins/mail:
+    get:
+      summary: List Mail Plugins
+      description: Returns a list of available mail plugins
+      security:
+      - userToken: []
+      - {}
+      responses:
+        '200':
+          description: List of mail plugins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    url:
+                      type: string
+              example: *id001
+      tags:
+      - Plugins
+  /plugins/download/{pluginId}/run:
+    post:
+      summary: Run Download Plugin
+      description: Execute a specific download plugin
+      parameters:
+      - name: pluginId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the download plugin to run
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: URL of the object to download
+                params:
+                  type: object
+                  description: Additional parameters for the plugin
+      security:
+      - userToken: []
+      responses:
+        '200':
+          description: Plugin execution successful
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Plugin not found
+      tags:
+      - Plugins
+  /plugins/visualization/{pluginId}/run:
+    post:
+      summary: Run Visualization Plugin
+      description: Execute a specific visualization plugin
+      parameters:
+      - name: pluginId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the visualization plugin to run
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  description: URL of the object to visualize
+                params:
+                  type: object
+                  description: Additional parameters for the plugin
+      security:
+      - userToken: []
+      responses:
+        '200':
+          description: Plugin execution successful
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Plugin not found
+      tags:
+      - Plugins
+  /plugins/submission/{pluginId}/run:
+    post:
+      summary: Run Submission Plugin
+      description: Execute a specific submission plugin
+      parameters:
+      - name: pluginId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the submission plugin to run
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: File to submit
+                params:
+                  type: object
+                  description: Additional parameters for the plugin
+      security:
+      - userToken: []
+      responses:
+        '200':
+          description: Plugin execution successful
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Plugin not found
+      tags:
+      - Plugins
+  /plugins/mail/{pluginId}/run:
+    post:
+      summary: Run Mail Plugin
+      description: Execute a specific mail plugin
+      parameters:
+      - name: pluginId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: ID of the mail plugin to run
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                to:
+                  type: string
+                  description: Recipient email address
+                subject:
+                  type: string
+                  description: Email subject
+                message:
+                  type: string
+                  description: Email message body
+                params:
+                  type: object
+                  description: Additional parameters for the plugin
+      security:
+      - userToken: []
+      responses:
+        '200':
+          description: Plugin execution successful
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          description: Plugin not found
+      tags:
+      - Plugins
+components:
+  securitySchemes:
+    userToken:
+      type: apiKey
+      in: header
+      name: X-authorization
+      description: Authentication token with admin privileges
+tags:
+- name: Plugins

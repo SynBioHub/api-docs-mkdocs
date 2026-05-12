@@ -1,12 +1,10 @@
-# Petshop Documentation
+# SynBioHub Documentation
 
-Welcome to the Petshop documentation!
+Welcome to the SynBioHub API documentation!
 
-This is a simple example project that documents a petshop. 
-You can find the API documentation in the [API](api.md) section.
+This project contains the consolidated OpenAPI specifications for SynBioHub.
 
-## Features
+## API Sections
 
-- Manage pets
-- View pet details
-- Create new pets
+- [Main API](openapi-main.md): Core SynBioHub endpoints for users, search, and submissions.
+- [Plugins API](openapi-plugins.md): Endpoints for managing and interacting with SynBioHub plugins.
