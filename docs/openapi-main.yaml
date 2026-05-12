@@ -34,6 +34,9 @@ paths:
               required:
               - email
               - password
+            example:
+              email: "user@example.org"
+              password: "password123"
       responses:
         '200':
           description: "Login successful, returns user token"
@@ -41,6 +44,7 @@ paths:
             text/plain:
               schema:
                 type: string
+              example: "fb767104-6294-4d8b-9800-994f1076b1f1"
         '401':
           description: "Unauthorized - invalid credentials"
       tags:
@@ -85,6 +89,12 @@ paths:
               - name
               - email
               - password
+            example:
+              username: "newuser"
+              name: "New User"
+              email: "user@example.org"
+              password: "password123"
+              affiliation: "Example University"
       responses:
         '200':
           description: "Registration successful"
@@ -108,6 +118,8 @@ paths:
                   description: "The username or email of the user"
               required:
               - user
+            example:
+              user: "user@example.org"
       responses:
         '200':
           description: "Reset token requested (if user exists)"
@@ -134,6 +146,10 @@ paths:
               - token
               - password
               - passwordConfirm
+            example:
+              token: "reset-token-123"
+              password: "new-password"
+              passwordConfirm: "new-password"
       responses:
         '200':
           description: "Password reset successful"
@@ -154,6 +170,11 @@ paths:
             application/json:
               schema:
                 type: object
+              example:
+                username: "user123"
+                name: "John Doe"
+                email: "john@example.org"
+                affiliation: "Example University"
         '401':
           description: "Unauthorized - invalid or missing token"
       tags:
@@ -177,6 +198,10 @@ paths:
                   format: email
                 affiliation:
                   type: string
+            example:
+              name: "John Smith"
+              email: "jsmith@example.org"
+              affiliation: "New University"
       responses:
         '200':
           description: "Profile updated successfully"
@@ -296,6 +321,15 @@ paths:
               required:
               - type
               - id
+            example:
+              type: benchling
+              id: my-benchling-remote
+              url: https://benchling.com/api
+              benchlingApiToken: sk_live_abc123
+              isPublic: 'true'
+              rootCollectionDisplayId: benchling_collection
+              rootCollectionName: Benchling Collection
+              rootCollectionDescription: Remotely accessed Benchling parts
       responses:
         '200':
           description: Remote saved successfully
@@ -1994,6 +2028,9 @@ paths:
               required:
               - uri
               - url
+            example:
+              uri: "https://registry.example.org"
+              url: "https://registry.example.org/api"
       responses:
         '200':
           description: Registry saved successfully
@@ -2352,6 +2389,9 @@ paths:
               required:
               - uri
               - value
+            example:
+              uri: "https://synbiohub.org/public/user/collection/1"
+              value: "This is the updated description of the collection."
       responses:
         '200':
           description: Description updated successfully
@@ -2383,6 +2423,9 @@ paths:
               required:
               - uri
               - value
+            example:
+              uri: "https://synbiohub.org/public/user/collection/1"
+              value: "Added some notes about the assembly process."
       responses:
         '200':
           description: Notes updated successfully
@@ -2414,6 +2457,9 @@ paths:
               required:
               - uri
               - value
+            example:
+              uri: "https://synbiohub.org/public/user/collection/1"
+              value: "Synthesized by IDT."
       responses:
         '200':
           description: Source updated successfully
@@ -2445,6 +2491,9 @@ paths:
               required:
               - uri
               - value
+            example:
+              uri: "https://synbiohub.org/public/user/collection/1"
+              value: "1234567, 8901234"
       responses:
         '200':
           description: Citations updated successfully
