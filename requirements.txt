@@ -1,3 +1,0 @@
--e zensical
-mkdocs
-neoteroi-mkdocs
