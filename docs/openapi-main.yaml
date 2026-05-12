@@ -2,19 +2,19 @@ openapi: 3.0.0
 info:
   title: SynBioHub Main API
   version: 1.0.0
-  description: 'Main API endpoints for SynBioHub
+  description: "Main API endpoints for SynBioHub
 
 
     Supplementary guides for complex concepts:
 
     - [External Remotes](concepts/remotes.md)
 
-    - [SynBioHub Plugins](concepts/plugins.md)'
+    - [SynBioHub Plugins](concepts/plugins.md)"
 servers:
-- url: https://synbiohub.org
-  description: Main SynBioHub instance
-- url: http://localhost:7777
-  description: Local development instance
+  - url: https://synbiohub.org
+    description: Main SynBioHub instance
+  - url: http://localhost:7777
+    description: Local development instance
 paths:
   /login:
     post:
@@ -32,36 +32,36 @@ paths:
                 password:
                   type: string
               required:
-              - email
-              - password
+                - email
+                - password
             example:
               email: "user@example.org"
               password: "password123"
       responses:
-        '200':
+        "200":
           description: "Login successful, returns user token"
           content:
             text/plain:
               schema:
                 type: string
               example: "fb767104-6294-4d8b-9800-994f1076b1f1"
-        '401':
+        "401":
           description: "Unauthorized - invalid credentials"
       tags:
-      - User Account
+        - User Account
   /logout:
     post:
       summary: "Logout"
       description: "Logs out the user specified in the X-authorization header. Note that the actual controller endpoint is /do_logout."
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: "Logout successful"
-        '401':
+        "401":
           description: "Unauthorized - invalid or missing token"
       tags:
-      - User Account
+        - User Account
   /register:
     post:
       summary: "Register"
@@ -85,10 +85,10 @@ paths:
                 affiliation:
                   type: string
               required:
-              - username
-              - name
-              - email
-              - password
+                - username
+                - name
+                - email
+                - password
             example:
               username: "newuser"
               name: "New User"
@@ -96,12 +96,12 @@ paths:
               password: "password123"
               affiliation: "Example University"
       responses:
-        '200':
+        "200":
           description: "Registration successful"
-        '400':
+        "400":
           description: "Bad request - invalid input or user already exists"
       tags:
-      - User Account
+        - User Account
   /resetPassword:
     post:
       summary: "Request Reset Password Token"
@@ -117,14 +117,14 @@ paths:
                   type: string
                   description: "The username or email of the user"
               required:
-              - user
+                - user
             example:
               user: "user@example.org"
       responses:
-        '200':
+        "200":
           description: "Reset token requested (if user exists)"
       tags:
-      - User Account
+        - User Account
   /setNewPassword:
     post:
       summary: "Set New Password"
@@ -143,28 +143,28 @@ paths:
                 passwordConfirm:
                   type: string
               required:
-              - token
-              - password
-              - passwordConfirm
+                - token
+                - password
+                - passwordConfirm
             example:
               token: "reset-token-123"
               password: "new-password"
               passwordConfirm: "new-password"
       responses:
-        '200':
+        "200":
           description: "Password reset successful"
-        '400':
+        "400":
           description: "Bad request - invalid token or passwords do not match"
       tags:
-      - User Account
+        - User Account
   /profile:
     get:
       summary: "View Profile"
       description: "View the user's profile. Requires X-authorization header."
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: "User profile information"
           content:
             application/json:
@@ -175,15 +175,15 @@ paths:
                 name: "John Doe"
                 email: "john@example.org"
                 affiliation: "Example University"
-        '401':
+        "401":
           description: "Unauthorized - invalid or missing token"
       tags:
-      - User Account
+        - User Account
     post:
       summary: "Update Profile"
       description: "Update the user's profile. Requires X-authorization header. Currently only updates name, email, and affiliation."
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -203,41 +203,41 @@ paths:
               email: "jsmith@example.org"
               affiliation: "New University"
       responses:
-        '200':
+        "200":
           description: "Profile updated successfully"
-        '401':
+        "401":
           description: "Unauthorized - invalid or expired session"
       tags:
-      - User Account
+        - User Account
   /admin/remotes:
     get:
       summary: View Remotes
       description: View current remote repositories
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: List of current remote repositories
           content:
             text/plain:
               schema:
                 type: string
                 description: Current remote repositories information
-              example: 'benchling (Benchling): https://benchling.com/api
+              example: "benchling (Benchling): https://benchling.com/api
 
-                ice (ICE): https://ice.example.org'
-        '401':
+                ice (ICE): https://ice.example.org"
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an administrator
       tags:
-      - Remotes Management
+        - Remotes Management
   /admin/saveRemote:
     post:
       summary: Save Remote (Benchling or ICE)
       description: Save a new Benchling or ICE remote repository
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -248,8 +248,8 @@ paths:
                 type:
                   type: string
                   enum:
-                  - benchling
-                  - ice
+                    - benchling
+                    - ice
                   description: Type of the remote (Benchling or ICE)
                 id:
                   type: string
@@ -276,10 +276,10 @@ paths:
                 rejectUnauthorized:
                   type: string
                   enum:
-                  - 'true'
-                  - 'false'
+                    - "true"
+                    - "false"
                   description: Whether to check SSL certificate
-                  default: 'true'
+                  default: "true"
                 folderPrefix:
                   type: string
                   description: Prefix to use for folders on the remote
@@ -302,10 +302,10 @@ paths:
                 isPublic:
                   type: string
                   enum:
-                  - 'true'
-                  - 'false'
+                    - "true"
+                    - "false"
                   description: Should the remote be visible publicly?
-                  default: 'true'
+                  default: "true"
                 partNumberPrefix:
                   type: string
                   description: Prefix to use for parts (ICE)
@@ -319,32 +319,32 @@ paths:
                   type: string
                   description: Description for the root collection on the remote
               required:
-              - type
-              - id
+                - type
+                - id
             example:
               type: benchling
               id: my-benchling-remote
               url: https://benchling.com/api
               benchlingApiToken: sk_live_abc123
-              isPublic: 'true'
+              isPublic: "true"
               rootCollectionDisplayId: benchling_collection
               rootCollectionName: Benchling Collection
               rootCollectionDescription: Remotely accessed Benchling parts
       responses:
-        '200':
+        "200":
           description: Remote saved successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an administrator
       tags:
-      - Remotes Management
+        - Remotes Management
   /admin/deleteRemote:
     post:
       summary: Delete Remote
       description: Delete a remote repository
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -356,31 +356,31 @@ paths:
                   type: string
                   description: Id of the remote configuration to remove
               required:
-              - id
+                - id
             example:
               id: my-benchling
       responses:
-        '200':
+        "200":
           description: Remote deleted successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an administrator
       tags:
-      - Remotes Management
+        - Remotes Management
   /{uri}/addOwner:
     post:
       summary: Add Owner
       description: Add an owner to an object
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the object
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the object
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -392,51 +392,52 @@ paths:
                   type: string
                   description: The user ID of the owner being added
               required:
-              - user
+                - user
       responses:
-        '200':
+        "200":
           description: Owner added successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user does not have permission
       tags:
-      - Permission
+        - Permission
   /{uri}/removeOwner/{username}:
     post:
       summary: Remove Owner
       description: Remove an owner from an object
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the object
-      - name: username
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The username of the owner being removed
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the object
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The username of the owner being removed
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: Owner removed successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user does not have permission
       tags:
-      - Permission
+        - Permission
   /submit:
     post:
       summary: Submit SBOL Document
-      description: Create a new collection or add to an existing collection using
+      description:
+        Create a new collection or add to an existing collection using
         the elements within a file
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -446,7 +447,8 @@ paths:
               properties:
                 id:
                   type: string
-                  description: A user-defined string identifier for the submission,
+                  description:
+                    A user-defined string identifier for the submission,
                     alphanumeric and underscores only
                 version:
                   type: string
@@ -459,68 +461,71 @@ paths:
                   description: The description string to assign to the submission
                 citations:
                   type: string
-                  description: A list of comma separated pubmed IDs of citations to
+                  description:
+                    A list of comma separated pubmed IDs of citations to
                     store with the submission
                 overwrite_merge:
                   type: string
-                  description: 0 prevent if submission exists, 1 overwrite if submission
+                  description:
+                    0 prevent if submission exists, 1 overwrite if submission
                     exists, 2 to merge and prevent if submission exists, 3 to merge
                     and overwrite matching URIs
                   enum:
-                  - '0'
-                  - '1'
-                  - '2'
-                  - '3'
+                    - "0"
+                    - "1"
+                    - "2"
+                    - "3"
                 file:
                   type: string
                   format: binary
-                  description: Contents of an SBOL2, SBOL1, GenBank, FASTA, GFF3,
+                  description:
+                    Contents of an SBOL2, SBOL1, GenBank, FASTA, GFF3,
                     ZIP, or COMBINE Archive file
                 rootCollections:
                   type: string
                   description: The URI of the collection to be submitted into
               required:
-              - file
+                - file
       responses:
-        '200':
+        "200":
           description: Submission successful
           content:
             text/plain:
               schema:
                 type: string
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '415':
+        "415":
           description: Unsupported media type - file format not recognized
-        '500':
+        "500":
           description: Server error processing submission
       tags:
-      - Submission
+        - Submission
   /{prefix}/{designid}/{version}/makePublic:
     post:
       summary: Make Collection Public
       description: Makes the collection specified by the URI public
       parameters:
-      - name: prefix
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The collection prefix
-      - name: designid
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The design ID
-      - name: version
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The version number
+        - name: prefix
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The collection prefix
+        - name: designid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The design ID
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The version number
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -536,177 +541,184 @@ paths:
                   description: The version for the new collection
                 name:
                   type: string
-                  description: The name for the new collection (optional, default
+                  description:
+                    The name for the new collection (optional, default
                     is existing name)
                 description:
                   type: string
-                  description: The description for the new collection (optional, default
+                  description:
+                    The description for the new collection (optional, default
                     is existing description)
                 citations:
                   type: string
-                  description: The comma-separated list of PubMed ids (optional, default
+                  description:
+                    The comma-separated list of PubMed ids (optional, default
                     is existing citations)
                 tabState:
                   type: string
                   enum:
-                  - new
-                  - existing
-                  description: Use "new" for moving to a new public collection, and
+                    - new
+                    - existing
+                  description:
+                    Use "new" for moving to a new public collection, and
                     "existing" if moving into an existing public collection
                 collections:
                   type: string
                   format: uri
-                  description: If moving into an existing collection, the URI of the
+                  description:
+                    If moving into an existing collection, the URI of the
                     collection
               required:
-              - id
-              - tabState
+                - id
+                - tabState
       responses:
-        '200':
+        "200":
           description: Collection made public successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an owner of this collection
-        '404':
+        "404":
           description: Collection not found
       tags:
-      - Submission
+        - Submission
   /{prefix}/{designid}/{version}/removeCollection:
     get:
       summary: Remove Collection
       description: Removes the collection specified by the URI
       parameters:
-      - name: prefix
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The collection prefix
-      - name: designid
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The design ID
-      - name: version
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The version number
+        - name: prefix
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The collection prefix
+        - name: designid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The design ID
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The version number
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: Collection removed successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an owner of this collection
-        '404':
+        "404":
           description: Collection not found
       tags:
-      - Submission
+        - Submission
   /{prefix}/{designid}/{version}/remove:
     get:
       summary: Remove Object
-      description: Remove the object specified by the URI, and references to that
+      description:
+        Remove the object specified by the URI, and references to that
         object
       parameters:
-      - name: prefix
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The collection prefix
-      - name: designid
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The design ID
-      - name: version
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The version number
+        - name: prefix
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The collection prefix
+        - name: designid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The design ID
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The version number
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: Object removed successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an owner of this object
-        '404':
+        "404":
           description: Object not found
       tags:
-      - Submission
+        - Submission
   /{prefix}/{designid}/{version}/replace:
     get:
       summary: Replace Object
-      description: Remove the object specified by the URI, but leave references to
+      description:
+        Remove the object specified by the URI, but leave references to
         the object
       parameters:
-      - name: prefix
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The collection prefix
-      - name: designid
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The design ID
-      - name: version
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The version number
+        - name: prefix
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The collection prefix
+        - name: designid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The design ID
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The version number
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: Object replaced successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an owner of this object
-        '404':
+        "404":
           description: Object not found
       tags:
-      - Submission
+        - Submission
   /{prefix}/{designid}/{version}/icon:
     post:
       summary: Update Collection Icon
       description: Updates the collection's icon
       parameters:
-      - name: prefix
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The collection prefix
-      - name: designid
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The design ID
-      - name: version
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The version number
+        - name: prefix
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The collection prefix
+        - name: designid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The design ID
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The version number
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -719,46 +731,47 @@ paths:
                   format: binary
                   description: The desired collection icon
               required:
-              - collectionIcon
+                - collectionIcon
       responses:
-        '200':
+        "200":
           description: Collection icon updated successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an owner of this collection
-        '404':
+        "404":
           description: Collection not found
-        '415':
+        "415":
           description: Unsupported media type - file format not recognized
       tags:
-      - Submission
+        - Submission
   /{prefix}/{designid}/{version}/addToCollection:
     post:
       summary: Add to Collection
-      description: Add member specified by the URI to a collection specified by the
+      description:
+        Add member specified by the URI to a collection specified by the
         collections parameter
       parameters:
-      - name: prefix
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The collection prefix
-      - name: designid
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The design ID
-      - name: version
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The version number
+        - name: prefix
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The collection prefix
+        - name: designid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The design ID
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The version number
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -771,44 +784,45 @@ paths:
                   format: uri
                   description: The URI of collection to add a member to
               required:
-              - collections
+                - collections
       responses:
-        '200':
+        "200":
           description: Member added to collection successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an owner of this object
-        '404':
+        "404":
           description: Object not found
       tags:
-      - Submission
+        - Submission
   /{prefix}/{designid}/{version}/removeMembership:
     post:
       summary: Remove Membership
-      description: Remove a member specified by the member parameter of a collection
+      description:
+        Remove a member specified by the member parameter of a collection
         specified by the URI
       parameters:
-      - name: prefix
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The collection prefix
-      - name: designid
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The design ID
-      - name: version
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The version number
+        - name: prefix
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The collection prefix
+        - name: designid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The design ID
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The version number
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -821,24 +835,24 @@ paths:
                   format: uri
                   description: The URI of the object to remove as a member
               required:
-              - member
+                - member
       responses:
-        '200':
+        "200":
           description: Membership removed successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an owner of this object
-        '404':
+        "404":
           description: Object not found
       tags:
-      - Submission
+        - Submission
   /admin/deleteRegistry:
     post:
       summary: Delete Registry
       description: Delete a registry from the Web of Registries
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -851,24 +865,24 @@ paths:
                   format: uri
                   description: URI prefix of the registry to delete
               required:
-              - uri
+                - uri
       responses:
-        '200':
+        "200":
           description: Registry deleted successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an administrator
-        '404':
+        "404":
           description: Registry not found
       tags:
-      - Registry Management
+        - Registry Management
   /admin/setAdministratorEmail:
     post:
       summary: Set Administrator Email
       description: Update Web Of Registries administrator email
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -881,37 +895,37 @@ paths:
                   format: email
                   description: Administrator email address
               required:
-              - administratorEmail
+                - administratorEmail
       responses:
-        '200':
+        "200":
           description: Administrator email updated successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an administrator
       tags:
-      - Registry Management
+        - Registry Management
   /admin/retrieveFromWebOfRegistries:
     post:
       summary: Retrieve From Web Of Registries
       description: Update registries from Web-of-Registries
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: Registries updated successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an administrator
       tags:
-      - Registry Management
+        - Registry Management
   /admin/federate:
     post:
       summary: Federate
       description: Send request to join Web-of-Registries for a SynBioHub instance
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -928,48 +942,49 @@ paths:
                   format: uri
                   description: URL for the Web-of-Registries
               required:
-              - administratorEmail
-              - webOfRegistries
+                - administratorEmail
+                - webOfRegistries
       responses:
-        '200':
+        "200":
           description: Federation request sent successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an administrator
       tags:
-      - Registry Management
+        - Registry Management
   /search/{query}:
     get:
       summary: Search metadata
       description: Returns metadata for objects matching the search query
       parameters:
-      - name: query
-        in: path
-        required: true
-        schema:
-          type: string
-        description: 'Search query composed of key=value pairs and optional search
-          string. For sequence search, use keys: globalsequence, sequence, file_search,
-          maxaccepts, maxrejects, id, iddef.'
-        example: objectType=ComponentDefinition&role=http://identifiers.org/so/SO:0000316&searchterm
-      - name: offset
-        in: query
-        schema:
-          type: integer
-          minimum: 0
-        description: Pagination offset
-      - name: limit
-        in: query
-        schema:
-          type: integer
-          minimum: 1
-        description: Maximum number of results to return
+        - name: query
+          in: path
+          required: true
+          schema:
+            type: string
+          description:
+            "Search query composed of key=value pairs and optional search
+            string. For sequence search, use keys: globalsequence, sequence, file_search,
+            maxaccepts, maxrejects, id, iddef."
+          example: objectType=ComponentDefinition&role=http://identifiers.org/so/SO:0000316&searchterm
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+          description: Pagination offset
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+          description: Maximum number of results to return
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: Search results
           content:
             application/json:
@@ -990,47 +1005,48 @@ paths:
                     version:
                       type: string
               example:
-              - uri: https://synbiohub.org/public/igem/BBa_B0034/1
-                name: BBa_B0034
-                description: RBS (Elowitz 1999) - medium efficiency
-                displayId: BBa_B0034
-                version: '1'
+                - uri: https://synbiohub.org/public/igem/BBa_B0034/1
+                  name: BBa_B0034
+                  description: RBS (Elowitz 1999) - medium efficiency
+                  displayId: BBa_B0034
+                  version: "1"
       tags:
-      - Search
+        - Search
   /searchCount/{query}:
     get:
       summary: Count search results
       description: Returns the number of items matching the search query
       parameters:
-      - name: query
-        in: path
-        required: true
-        schema:
-          type: string
-        description: Search query composed of key=value pairs and optional search
-          string
-        example: objectType=ComponentDefinition&role=http://identifiers.org/so/SO:0000316&searchterm
+        - name: query
+          in: path
+          required: true
+          schema:
+            type: string
+          description:
+            Search query composed of key=value pairs and optional search
+            string
+          example: objectType=ComponentDefinition&role=http://identifiers.org/so/SO:0000316&searchterm
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: Count of matching items
           content:
             text/plain:
               schema:
                 type: integer
       tags:
-      - Search
+        - Search
   /rootCollections:
     get:
       summary: Get root collections
       description: Returns a list of all root collections
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: List of root collections
           content:
             application/json:
@@ -1051,15 +1067,15 @@ paths:
                     version:
                       type: string
       tags:
-      - Search
+        - Search
   /manage:
     get:
       summary: View user submissions
       description: Returns metadata on all submissions for the authenticated user
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: User submissions
           content:
             application/json:
@@ -1081,19 +1097,20 @@ paths:
                     uri:
                       type: string
                       format: uri
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
       tags:
-      - Search
+        - Search
   /shared:
     get:
       summary: Search shared objects
-      description: Returns metadata for objects that have been shared with the current
+      description:
+        Returns metadata for objects that have been shared with the current
         user
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: Shared objects
           content:
             application/json:
@@ -1113,26 +1130,26 @@ paths:
                       type: string
                     version:
                       type: string
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
       tags:
-      - Search
+        - Search
   /{uri}/subCollections:
     get:
       summary: Search sub-collections
       description: Returns metadata for sub-collections of the specified collection
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the parent collection
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the parent collection
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: Sub-collections
           content:
             application/json:
@@ -1153,23 +1170,23 @@ paths:
                     version:
                       type: string
       tags:
-      - Search
+        - Search
   /{uri}/twins:
     get:
       summary: Search twins
       description: Returns other components that have the same sequence
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the component to find twins for
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the component to find twins for
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: Twin components
           content:
             application/json:
@@ -1190,46 +1207,46 @@ paths:
                     version:
                       type: string
       tags:
-      - Search
+        - Search
   /{uri}/twinsCount:
     get:
       summary: Count twins
       description: Returns the number of other components that have the same sequence
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the component to find twins for
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the component to find twins for
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: Count of twin components
           content:
             text/plain:
               schema:
                 type: integer
       tags:
-      - Search
+        - Search
   /{uri}/similar:
     get:
       summary: Search similar components
       description: Returns components with similar sequences
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the component to find similar components for
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the component to find similar components for
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: Similar components
           content:
             application/json:
@@ -1250,46 +1267,46 @@ paths:
                     version:
                       type: string
       tags:
-      - Search
+        - Search
   /{uri}/similarCount:
     get:
       summary: Count similar components
       description: Returns the number of components with similar sequences
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the component to find similar components for
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the component to find similar components for
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: Count of similar components
           content:
             text/plain:
               schema:
                 type: integer
       tags:
-      - Search
+        - Search
   /{uri}/uses:
     get:
       summary: Search uses
       description: Returns components that use the specified component
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the component to find uses for
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the component to find uses for
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: Components using the specified component
           content:
             application/json:
@@ -1310,334 +1327,337 @@ paths:
                     version:
                       type: string
       tags:
-      - Search
+        - Search
   /{uri}/usesCount:
     get:
       summary: Count uses
       description: Returns the number of components that use the specified component
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the component to find uses for
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the component to find uses for
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: Count of components using the specified component
           content:
             text/plain:
               schema:
                 type: integer
       tags:
-      - Search
+        - Search
   /{objectType}/count:
     get:
       summary: Count objects by type
       description: Returns the number of objects of the specified type
       parameters:
-      - name: objectType
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The type of object to count (e.g. ComponentDefinition)
-        example: ComponentDefinition
+        - name: objectType
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The type of object to count (e.g. ComponentDefinition)
+          example: ComponentDefinition
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: Count of objects
           content:
             text/plain:
               schema:
                 type: integer
       tags:
-      - Search
+        - Search
   /sparql:
     get:
       summary: SPARQL query
       description: Returns the results of the SPARQL query in JSON format
       parameters:
-      - name: query
-        in: query
-        required: true
-        schema:
-          type: string
-        description: SPARQL query
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+          description: SPARQL query
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: SPARQL query results
           content:
             application/json:
               schema:
                 type: object
       tags:
-      - Search
+        - Search
   /{prefix}/{designid}/{version}/sbol:
     get:
       summary: Download SBOL
       description: Returns the object in SBOL format
       parameters:
-      - name: prefix
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The collection prefix
-        example: public/igem
-      - name: designid
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The design ID
-        example: BBa_K1404008
-      - name: version
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The version number
-        example: 1
+        - name: prefix
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The collection prefix
+          example: public/igem
+        - name: designid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The design ID
+          example: BBa_K1404008
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The version number
+          example: 1
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: SBOL document
           content:
             application/rdf+xml:
               schema:
                 type: string
-              example: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rdf:RDF xmlns:rdf=\"\
+              example:
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rdf:RDF xmlns:rdf=\"\
                 http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:sbol=\"http://sbols.org/v2#\"\
                 >\n  <!-- SBOL RDF content -->\n</rdf:RDF>\n"
-        '403':
+        "403":
           description: Not authorized to access this object
-        '404':
+        "404":
           description: Object not found
       tags:
-      - Download
+        - Download
   /{prefix}/{designid}/{version}/sbolnr:
     get:
       summary: Download Non-Recursive SBOL
-      description: Returns the object in SBOL format non-recursively (without its
+      description:
+        Returns the object in SBOL format non-recursively (without its
         children)
       parameters:
-      - name: prefix
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The collection prefix
-      - name: designid
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The design ID
-      - name: version
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The version number
+        - name: prefix
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The collection prefix
+        - name: designid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The design ID
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The version number
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: SBOL document (non-recursive)
           content:
             application/rdf+xml:
               schema:
                 type: string
-              example: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rdf:RDF xmlns:rdf=\"\
+              example:
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<rdf:RDF xmlns:rdf=\"\
                 http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:sbol=\"http://sbols.org/v2#\"\
                 >\n  <!-- SBOL RDF content (non-recursive) -->\n</rdf:RDF>\n"
-        '403':
+        "403":
           description: Not authorized to access this object
-        '404':
+        "404":
           description: Object not found
       tags:
-      - Download
+        - Download
   /{prefix}/{designid}/{version}/metadata:
     get:
       summary: Download Metadata
       description: Returns the metadata for the object
       parameters:
-      - name: prefix
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The collection prefix
-      - name: designid
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The design ID
-      - name: version
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The version number
+        - name: prefix
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The collection prefix
+        - name: designid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The design ID
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The version number
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: Metadata in JSON format
           content:
             application/json:
               schema:
                 type: object
-        '403':
+        "403":
           description: Not authorized to access this object
-        '404':
+        "404":
           description: Object not found
       tags:
-      - Download
+        - Download
   /{prefix}/{designid}/{version}/gb:
     get:
       summary: Download GenBank
       description: Returns the object in GenBank format
       parameters:
-      - name: prefix
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The collection prefix
-      - name: designid
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The design ID
-      - name: version
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The version number
+        - name: prefix
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The collection prefix
+        - name: designid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The design ID
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The version number
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: GenBank file
           content:
             text/plain:
               schema:
                 type: string
-        '403':
+        "403":
           description: Not authorized to access this object
-        '404':
+        "404":
           description: Object not found
       tags:
-      - Download
+        - Download
   /{prefix}/{designid}/{version}/fasta:
     get:
       summary: Download FASTA
       description: Returns the object in FASTA format
       parameters:
-      - name: prefix
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The collection prefix
-      - name: designid
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The design ID
-      - name: version
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The version number
+        - name: prefix
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The collection prefix
+        - name: designid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The design ID
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The version number
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: FASTA file
           content:
             text/plain:
               schema:
                 type: string
-        '403':
+        "403":
           description: Not authorized to access this object
-        '404':
+        "404":
           description: Object not found
       tags:
-      - Download
+        - Download
   /{prefix}/{designid}/{version}/gff:
     get:
       summary: Download GFF3
       description: Returns the object in GFF3 format
       parameters:
-      - name: prefix
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The collection prefix
-      - name: designid
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The design ID
-      - name: version
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The version number
+        - name: prefix
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The collection prefix
+        - name: designid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The design ID
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The version number
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: GFF3 file
           content:
             text/plain:
               schema:
                 type: string
-        '403':
+        "403":
           description: Not authorized to access this object
-        '404':
+        "404":
           description: Object not found
       tags:
-      - Download
+        - Download
   /{uri}/attach:
     post:
       summary: Attach File
       description: Attach a file to an object
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the object
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the object
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -1650,29 +1670,29 @@ paths:
                   format: binary
                   description: The file to attach
               required:
-              - file
+                - file
       responses:
-        '200':
+        "200":
           description: File attached successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user does not have permission
       tags:
-      - Attachment
+        - Attachment
   /{uri}/attachURL:
     post:
       summary: Attach URL
       description: Attach a URL to an object
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the object
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the object
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -1691,173 +1711,173 @@ paths:
                   type: string
                   description: The format type of the object at the URL
               required:
-              - url
-              - name
-              - type
+                - url
+                - name
+                - type
       responses:
-        '200':
+        "200":
           description: URL attached successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user does not have permission
       tags:
-      - Attachment
+        - Attachment
   /{uri}/download:
     get:
       summary: Download Attachment
       description: Download an attachment from an object
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the object
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the object
       security:
-      - userToken: []
-      - {}
+        - userToken: []
+        - {}
       responses:
-        '200':
+        "200":
           description: Attachment file
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: binary
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '404':
+        "404":
           description: Attachment not found
       tags:
-      - Attachment
+        - Attachment
   /admin:
     get:
       summary: Get Status
       description: Returns the status of the SynBioHub instance
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: SynBioHub status
           content:
             application/json:
               schema:
                 type: object
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - Administration
+        - Administration
   /admin/sparql:
     get:
       summary: SPARQL Admin Query
       description: Execute a SPARQL admin query
       parameters:
-      - name: query
-        in: query
-        required: true
-        schema:
-          type: string
-        description: The SPARQL query to execute
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The SPARQL query to execute
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: Query results in JSON format
           content:
             application/json:
               schema:
                 type: object
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - Administration
+        - Administration
   /admin/virtuoso:
     get:
       summary: Get Virtuoso Status
       description: Returns 200 when Virtuoso is alive and 500 when it is not
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: Virtuoso is alive
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
-        '500':
+        "500":
           description: Virtuoso is not alive
       tags:
-      - Administration
+        - Administration
   /admin/graphs:
     get:
       summary: View Graphs
       description: Returns existing graphs and their number of triples
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: List of graphs and their sizes
           content:
             text/plain:
               schema:
                 type: string
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - Administration
+        - Administration
   /admin/log:
     get:
       summary: View Log
       description: Returns the SynBioHub log file
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: Log file contents
           content:
             text/plain:
               schema:
                 type: string
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - Administration
+        - Administration
   /admin/mail:
     get:
       summary: View Current Mail Settings
       description: Returns the current mail configuration
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: Current mail configuration
           content:
             text/plain:
               schema:
                 type: string
-              example: 'key: SG.xxx
+              example: "key: SG.xxx
 
-                fromEmail: admin@synbiohub.org'
-        '401':
+                fromEmail: admin@synbiohub.org"
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - Mail Administration
+        - Mail Administration
     post:
       summary: Update Mail Settings
       description: Update the mail configuration
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -1873,46 +1893,46 @@ paths:
                   format: email
                   description: SendGrid from Email
               required:
-              - key
-              - fromEmail
+                - key
+                - fromEmail
             example:
               key: SG.newkey
               fromEmail: admin@synbiohub.org
       responses:
-        '200':
+        "200":
           description: Mail configuration updated successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - Mail Administration
+        - Mail Administration
   /admin/plugins:
     get:
       summary: View Plugins
       description: View current plugins
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: List of current plugins
           content:
             text/plain:
               schema:
                 type: string
-              example: 'example-plugin (rendering): https://plugins.synbiohub.org/example'
-        '401':
+              example: "example-plugin (rendering): https://plugins.synbiohub.org/example"
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - Plugin Administration
+        - Plugin Administration
   /admin/savePlugin:
     post:
       summary: Save Plugin
       description: Save a new plugin
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -1934,30 +1954,30 @@ paths:
                   format: uri
                   description: URL for the plugin
               required:
-              - id
-              - category
-              - name
-              - url
+                - id
+                - category
+                - name
+                - url
             example:
               id: New
               category: rendering
               name: VisBol
               url: https://visbol.org/api
       responses:
-        '200':
+        "200":
           description: Plugin saved successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - Plugin Administration
+        - Plugin Administration
   /admin/deletePlugin:
     post:
       summary: Delete Plugin
       description: Delete a plugin
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -1972,45 +1992,45 @@ paths:
                   type: string
                   description: The type of plugin (rendering, submit, download)
               required:
-              - id
-              - category
+                - id
+                - category
       responses:
-        '200':
+        "200":
           description: Plugin deleted successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - Plugin Administration
+        - Plugin Administration
   /admin/registries:
     get:
       summary: View Registries
       description: View current registries
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: List of current registries
           content:
             text/plain:
               schema:
                 type: string
-              example: 'https://synbiohub.org: https://synbiohub.org
+              example: "https://synbiohub.org: https://synbiohub.org
 
-                https://registry.example.org: https://registry.example.org'
-        '401':
+                https://registry.example.org: https://registry.example.org"
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - Registry Administration
+        - Registry Administration
   /admin/saveRegistry:
     post:
       summary: Save Registry
       description: Save a new registry
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -2026,26 +2046,26 @@ paths:
                   format: uri
                   description: URL for the registry
               required:
-              - uri
-              - url
+                - uri
+                - url
             example:
               uri: "https://registry.example.org"
               url: "https://registry.example.org/api"
       responses:
-        '200':
+        "200":
           description: Registry saved successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - Registry Administration
+        - Registry Administration
   /admin/explorer:
     post:
       summary: Update SBOLExplorer Config
       description: Update the SBOLExplorer configuration
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -2055,7 +2075,8 @@ paths:
               properties:
                 useSBOLExplorer:
                   type: boolean
-                  description: Boolean indicating whether SBOLExplorer is to be used
+                  description:
+                    Boolean indicating whether SBOLExplorer is to be used
                     or not
                 SBOLExplorerEndpoint:
                   type: string
@@ -2063,7 +2084,8 @@ paths:
                   description: The endpoint where SBOLExplorer can be found
                 useDistributedSearch:
                   type: boolean
-                  description: Boolean indicating whether distributed search should
+                  description:
+                    Boolean indicating whether distributed search should
                     be used
                 pagerankTolerance:
                   type: string
@@ -2091,76 +2113,76 @@ paths:
                 whichSearch:
                   type: string
                   enum:
-                  - usearch
-                  - vsearch
+                    - usearch
+                    - vsearch
                   description: Which algorithms to use, 'usearch' or 'vsearch'
       responses:
-        '200':
+        "200":
           description: SBOLExplorer configuration updated successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - SBOLExplorer
+        - SBOLExplorer
   /admin/explorerlog:
     get:
       summary: View SBOLExplorer Log
       description: View the SBOLExplorer log
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: SBOLExplorer log contents
           content:
             text/plain:
               schema:
                 type: string
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - SBOLExplorer
+        - SBOLExplorer
   /admin/explorerUpdateIndex:
     post:
       summary: Update SBOLExplorer Index
       description: Updates SBOLExplorer index
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: SBOLExplorer index updated successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - SBOLExplorer
+        - SBOLExplorer
   /admin/theme:
     get:
       summary: View Theme
       description: View the current theme
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: Current theme configuration
           content:
             text/plain:
               schema:
                 type: string
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - Theme Administration
+        - Theme Administration
     post:
       summary: Update Theme
       description: Update the theme
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -2185,42 +2207,42 @@ paths:
                   format: binary
                   description: Logo image file
               required:
-              - instanceName
-              - frontPageText
-              - baseColor
+                - instanceName
+                - frontPageText
+                - baseColor
       responses:
-        '200':
+        "200":
           description: Theme updated successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - Theme Administration
+        - Theme Administration
   /admin/users:
     get:
       summary: View Users Config
       description: View the current users
       security:
-      - userToken: []
+        - userToken: []
       responses:
-        '200':
+        "200":
           description: List of current users
           content:
             text/plain:
               schema:
                 type: string
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - User Administration
+        - User Administration
     post:
       summary: Update Users Config
       description: Update the user config
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -2232,20 +2254,20 @@ paths:
                   type: boolean
                   description: Flag indicating if public signup is allowed
       responses:
-        '200':
+        "200":
           description: User config updated successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - User Administration
+        - User Administration
   /admin/newUser:
     post:
       summary: Create New User
       description: Create a new user
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -2276,9 +2298,9 @@ paths:
                   type: boolean
                   description: Is the new user an admin?
               required:
-              - username
-              - name
-              - email
+                - username
+                - name
+                - email
             example:
               username: newuser
               name: New User
@@ -2286,20 +2308,20 @@ paths:
               affiliation: Example Univ
               isAdmin: false
       responses:
-        '200':
+        "200":
           description: User created successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - User Administration
+        - User Administration
   /admin/updateUser:
     post:
       summary: Update User
       description: Update a user's settings
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -2330,22 +2352,22 @@ paths:
                   type: boolean
                   description: Is this user an admin?
               required:
-              - id
+                - id
       responses:
-        '200':
+        "200":
           description: User updated successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - User Administration
+        - User Administration
   /admin/deleteUser:
     post:
       summary: Delete User
       description: Delete a user
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -2357,22 +2379,22 @@ paths:
                   type: string
                   description: The ID of user to delete
               required:
-              - id
+                - id
       responses:
-        '200':
+        "200":
           description: User deleted successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an admin
       tags:
-      - User Administration
+        - User Administration
   /updateMutableDescription:
     post:
       summary: Edit Mutable Description
       description: Edit the mutable description of an object
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -2387,26 +2409,26 @@ paths:
                   type: string
                   description: The new value for the mutable description
               required:
-              - uri
-              - value
+                - uri
+                - value
             example:
               uri: "https://synbiohub.org/public/user/collection/1"
               value: "This is the updated description of the collection."
       responses:
-        '200':
+        "200":
           description: Description updated successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an owner of this object
       tags:
-      - Edit
+        - Edit
   /updateMutableNotes:
     post:
       summary: Edit Mutable Notes
       description: Edit the mutable notes of an object
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -2421,26 +2443,26 @@ paths:
                   type: string
                   description: The new value for the mutable notes
               required:
-              - uri
-              - value
+                - uri
+                - value
             example:
               uri: "https://synbiohub.org/public/user/collection/1"
               value: "Added some notes about the assembly process."
       responses:
-        '200':
+        "200":
           description: Notes updated successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an owner of this object
       tags:
-      - Edit
+        - Edit
   /updateMutableSource:
     post:
       summary: Edit Mutable Source
       description: Edit the mutable source of an object
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -2455,26 +2477,26 @@ paths:
                   type: string
                   description: The new value for the mutable source
               required:
-              - uri
-              - value
+                - uri
+                - value
             example:
               uri: "https://synbiohub.org/public/user/collection/1"
               value: "Synthesized by IDT."
       responses:
-        '200':
+        "200":
           description: Source updated successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an owner of this object
       tags:
-      - Edit
+        - Edit
   /updateCitations:
     post:
       summary: Edit Citations
       description: Edit the citations of an object
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -2489,46 +2511,46 @@ paths:
                   type: string
                   description: The new value for the citation
               required:
-              - uri
-              - value
+                - uri
+                - value
             example:
               uri: "https://synbiohub.org/public/user/collection/1"
               value: "1234567, 8901234"
       responses:
-        '200':
+        "200":
           description: Citations updated successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an owner of this object
       tags:
-      - Edit
+        - Edit
   /{uri}/edit/{field}:
     post:
       summary: Edit Field
       description: Edit a field of an object. Note that the actual controller endpoint name is /editField.
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the object
-      - name: field
-        in: path
-        required: true
-        schema:
-          type: string
-          enum:
-          - title
-          - description
-          - role
-          - wasDerivedFrom
-          - type
-          - annotation
-        description: The field to edit
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the object
+        - name: field
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - title
+              - description
+              - role
+              - wasDerivedFrom
+              - type
+              - annotation
+          description: The field to edit
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -2546,41 +2568,41 @@ paths:
                   type: string
                   description: A predicate for an annotation
               required:
-              - previous
-              - object
+                - previous
+                - object
       responses:
-        '200':
+        "200":
           description: Field edited successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an owner of this object
       tags:
-      - Edit
+        - Edit
   /{uri}/add/{field}:
     post:
       summary: Add Field
       description: Add a field to an object. Note that the actual controller endpoint name is /addField.
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the object
-      - name: field
-        in: path
-        required: true
-        schema:
-          type: string
-          enum:
-          - role
-          - type
-          - wasDerivedFrom
-          - annotation
-        description: The field to add
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the object
+        - name: field
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - role
+              - type
+              - wasDerivedFrom
+              - annotation
+          description: The field to add
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -2595,42 +2617,42 @@ paths:
                   type: string
                   description: A predicate for an annotation
               required:
-              - object
+                - object
       responses:
-        '200':
+        "200":
           description: Field added successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an owner of this object
       tags:
-      - Edit
+        - Edit
   /{uri}/remove/{field}:
     post:
       summary: Remove Field
       description: Remove a field from an object. Note that the actual controller endpoint name is /removeField.
       parameters:
-      - name: uri
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The URI of the object
-      - name: field
-        in: path
-        required: true
-        schema:
-          type: string
-          enum:
-          - role
-          - type
-          - title
-          - description
-          - wasDerivedFrom
-          - annotation
-        description: The field to remove
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the object
+        - name: field
+          in: path
+          required: true
+          schema:
+            type: string
+            enum:
+              - role
+              - type
+              - title
+              - description
+              - wasDerivedFrom
+              - annotation
+          description: The field to remove
       security:
-      - userToken: []
+        - userToken: []
       requestBody:
         required: true
         content:
@@ -2645,16 +2667,49 @@ paths:
                   type: string
                   description: A predicate for an annotation
               required:
-              - object
+                - object
       responses:
-        '200':
+        "200":
           description: Field removed successfully
-        '401':
+        "401":
           description: Unauthorized - invalid or missing token
-        '403':
+        "403":
           description: Forbidden - user is not an owner of this object
       tags:
-      - Edit
+        - Edit
+  /callPlugin:
+    post:
+      summary: Call Plugin
+      description: Call a specified plugin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                endpoint:
+                  type: string
+                  enum: [status, evaluate, run]
+                category:
+                  type: string
+                  enum: [rendering, submit, download]
+                data:
+                  type: object
+                  description: Optional JSON data
+                prefix:
+                  type: string
+              required:
+                - name
+                - endpoint
+                - category
+      responses:
+        "200":
+          description: Plugin response
+      tags:
+        - Plugins
 components:
   securitySchemes:
     userToken:
@@ -2663,29 +2718,37 @@ components:
       name: X-authorization
       description: Authentication token with admin privileges
 tags:
-- name: User Account
-- name: Theme Administration
-- name: Download
-- name: Permission
-- name: SBOLExplorer
-- name: Remotes Management
-  description: Manage connections to external repositories. See the [Remotes Guide](concepts/remotes.md)
-    for more details.
-  externalDocs:
-    description: Remotes Concept Guide
-    url: concepts/remotes.md
-- name: Administration
-- name: Registry Administration
-- name: Registry Management
-- name: Plugin Administration
-  description: Manage SynBioHub plugins. See the [Plugins Guide](concepts/plugins.md)
-    for more details.
-  externalDocs:
-    description: Plugins Concept Guide
-    url: concepts/plugins.md
-- name: Search
-- name: Submission
-- name: Attachment
-- name: Mail Administration
-- name: Edit
-- name: User Administration
+  - name: User Account
+  - name: Theme Administration
+  - name: Download
+  - name: Permission
+  - name: SBOLExplorer
+  - name: Remotes Management
+    description:
+      Manage connections to external repositories. See the [Remotes Guide](concepts/remotes.md)
+      for more details.
+    externalDocs:
+      description: Remotes Concept Guide
+      url: concepts/remotes.md
+  - name: Administration
+  - name: Registry Administration
+  - name: Registry Management
+  - name: Plugin Administration
+    description:
+      Manage SynBioHub plugins. See the [Plugins Guide](concepts/plugins.md)
+      for more details.
+    externalDocs:
+      description: Plugins Concept Guide
+      url: concepts/plugins.md
+  - name: Plugins
+    description:
+      Endpoints for interacting with SynBioHub plugins.
+    externalDocs:
+      description: Plugins Concept Guide
+      url: concepts/plugins.md
+  - name: Search
+  - name: Submission
+  - name: Attachment
+  - name: Mail Administration
+  - name: Edit
+  - name: User Administration
