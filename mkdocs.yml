@@ -1,7 +1,7 @@
 site_name: Petshop Docs
 
 theme:
-  name: material
+  name: zensical
 
 plugins:
   - search
