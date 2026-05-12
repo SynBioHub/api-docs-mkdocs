@@ -17,6 +17,13 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Pet"
+              example:
+                - id: 1
+                  name: "Fluffy"
+                  tag: "dog"
+                - id: 2
+                  name: "Rex"
+                  tag: "cat"
     post:
       summary: Create a pet
       operationId: createPets
@@ -29,6 +36,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
   /pets/{petId}:
     get:
       summary: Info for a specific pet
@@ -48,12 +58,19 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Pet"
+              example:
+                id: 123
+                name: "Fluffy"
+                tag: "dog"
         default:
           description: unexpected error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              example:
+                code: 404
+                message: "Pet not found"
 components:
   schemas:
     Pet:
