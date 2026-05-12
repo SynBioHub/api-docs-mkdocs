@@ -9,26 +9,26 @@ paths:
       summary: List all pets
       operationId: listPets
       responses:
-        '200':
+        "200":
           description: A paged array of pets
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Pet'
+                  $ref: "#/components/schemas/Pet"
     post:
       summary: Create a pet
       operationId: createPets
       responses:
-        '201':
+        "201":
           description: Null response
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
   /pets/{petId}:
     get:
       summary: Info for a specific pet
@@ -40,19 +40,20 @@ paths:
           description: The id of the pet to retrieve
           schema:
             type: string
+            example: "123"
       responses:
-        '200':
+        "200":
           description: Expected response to a valid request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pet'
+                $ref: "#/components/schemas/Pet"
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 components:
   schemas:
     Pet:
@@ -64,10 +65,17 @@ components:
         id:
           type: integer
           format: int64
+          example: 1
         name:
           type: string
+          example: "Fluffy"
         tag:
           type: string
+          example: "dog"
+      example:
+        id: 1
+        name: "Fluffy"
+        tag: "dog"
     Error:
       type: object
       required:
@@ -77,5 +85,10 @@ components:
         code:
           type: integer
           format: int32
+          example: 404
         message:
           type: string
+          example: "Pet not found"
+      example:
+        code: 404
+        message: "Pet not found"
