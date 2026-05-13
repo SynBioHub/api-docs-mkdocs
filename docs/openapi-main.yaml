@@ -2627,10 +2627,10 @@ paths:
           description: Forbidden - user is not an owner of this object
       tags:
         - Edit
-  /{uri}/remove/{field}:
-    post:
-      summary: Remove Field
-      description: Remove a field from an object. Note that the actual controller endpoint name is /removeField.
+  /{uri}/remove:
+    get:
+      summary: Remove Object
+      description: Remove the object specified by the URI, and the references to that object.
       parameters:
         - name: uri
           in: path
@@ -2638,43 +2638,41 @@ paths:
           schema:
             type: string
           description: The URI of the object
-        - name: field
-          in: path
-          required: true
-          schema:
-            type: string
-            enum:
-              - role
-              - type
-              - title
-              - description
-              - wasDerivedFrom
-              - annotation
-          description: The field to remove
       security:
         - userToken: []
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                object:
-                  type: string
-                  description: The value of the field to remove
-                pred:
-                  type: string
-                  description: A predicate for an annotation
-              required:
-                - object
       responses:
         "200":
-          description: Field removed successfully
+          description: Object removed successfully
         "401":
           description: Unauthorized - invalid or missing token
         "403":
           description: Forbidden - user is not an owner of this object
+        "404":
+          description: Object not found
+      tags:
+        - Edit
+  /{uri}/replace:
+    get:
+      summary: Replace Object
+      description: Remove the object specified from URI, but leave references to the object.
+      parameters:
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The URI of the object
+      security:
+        - userToken: []
+      responses:
+        "200":
+          description: Object removed successfully
+        "401":
+          description: Unauthorized - invalid or missing token
+        "403":
+          description: Forbidden - user is not an owner of this object
+        "404":
+          description: Object not found
       tags:
         - Edit
   /callPlugin:
