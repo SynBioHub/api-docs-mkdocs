@@ -141,7 +141,7 @@ paths:
         "200":
           description: "Reset token requested (if user exists)"
       tags:
-        - User Account
+        - User
   /setNewPassword:
     post:
       summary: "Set New Password"
@@ -173,7 +173,7 @@ paths:
         "400":
           description: "Bad request - invalid token or passwords do not match"
       tags:
-        - User Account
+        - User
   /profile:
     get:
       summary: "View Profile"
@@ -195,7 +195,7 @@ paths:
         "401":
           description: "Unauthorized - invalid or missing token"
       tags:
-        - User Account
+        - User
     post:
       summary: "Update Profile"
       description: "Update the user's profile. Requires X-authorization header. Currently only updates name, email, and affiliation."
@@ -225,7 +225,7 @@ paths:
         "401":
           description: "Unauthorized - invalid or expired session"
       tags:
-        - User Account
+        - User
   /admin/remotes:
     get:
       summary: View Remotes
@@ -248,7 +248,7 @@ paths:
         "403":
           description: Forbidden - user is not an administrator
       tags:
-        - Remotes Management
+        - Administration
   /admin/saveRemote:
     post:
       summary: Save Remote (Benchling or ICE)
@@ -355,7 +355,7 @@ paths:
         "403":
           description: Forbidden - user is not an administrator
       tags:
-        - Remotes Management
+        - Administration
   /admin/deleteRemote:
     post:
       summary: Delete Remote
@@ -384,7 +384,7 @@ paths:
         "403":
           description: Forbidden - user is not an administrator
       tags:
-        - Remotes Management
+        - Administration
   /{uri}/addOwner:
     post:
       summary: Add Owner
@@ -893,7 +893,7 @@ paths:
         "404":
           description: Registry not found
       tags:
-        - Registry Management
+        - Administration
   /admin/setAdministratorEmail:
     post:
       summary: Set Administrator Email
@@ -921,7 +921,7 @@ paths:
         "403":
           description: Forbidden - user is not an administrator
       tags:
-        - Registry Management
+        - Administration
   /admin/retrieveFromWebOfRegistries:
     post:
       summary: Retrieve From Web Of Registries
@@ -936,7 +936,7 @@ paths:
         "403":
           description: Forbidden - user is not an administrator
       tags:
-        - Registry Management
+        - Administration
   /admin/federate:
     post:
       summary: Federate
@@ -969,7 +969,7 @@ paths:
         "403":
           description: Forbidden - user is not an administrator
       tags:
-        - Registry Management
+        - Administration
   /search/{query}:
     get:
       summary: Search metadata
@@ -1889,7 +1889,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - Mail Administration
+        - Administration
     post:
       summary: Update Mail Settings
       description: Update the mail configuration
@@ -1923,7 +1923,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - Mail Administration
+        - Administration
   /admin/plugins:
     get:
       summary: View Plugins
@@ -1943,7 +1943,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - Plugin Administration
+        - Administration
   /admin/savePlugin:
     post:
       summary: Save Plugin
@@ -1988,7 +1988,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - Plugin Administration
+        - Administration
   /admin/deletePlugin:
     post:
       summary: Delete Plugin
@@ -2019,7 +2019,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - Plugin Administration
+        - Administration
   /admin/registries:
     get:
       summary: View Registries
@@ -2041,7 +2041,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - Registry Administration
+        - Administration
   /admin/saveRegistry:
     post:
       summary: Save Registry
@@ -2076,7 +2076,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - Registry Administration
+        - Administration
   /admin/explorer:
     post:
       summary: Update SBOLExplorer Config
@@ -2141,7 +2141,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - SBOLExplorer
+        - Administration
   /admin/explorerlog:
     get:
       summary: View SBOLExplorer Log
@@ -2160,7 +2160,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - SBOLExplorer
+        - Administration
   /admin/explorerUpdateIndex:
     post:
       summary: Update SBOLExplorer Index
@@ -2175,7 +2175,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - SBOLExplorer
+        - Administration
   /admin/theme:
     get:
       summary: View Theme
@@ -2194,7 +2194,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - Theme Administration
+        - Administration
     post:
       summary: Update Theme
       description: Update the theme
@@ -2235,7 +2235,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - Theme Administration
+        - Administration
   /admin/users:
     get:
       summary: View Users Config
@@ -2254,7 +2254,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - User Administration
+        - Administration
     post:
       summary: Update Users Config
       description: Update the user config
@@ -2278,7 +2278,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - User Administration
+        - Administration
   /admin/newUser:
     post:
       summary: Create New User
@@ -2332,7 +2332,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - User Administration
+        - Administration
   /admin/updateUser:
     post:
       summary: Update User
@@ -2378,7 +2378,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - User Administration
+        - Administration
   /admin/deleteUser:
     post:
       summary: Delete User
@@ -2405,7 +2405,7 @@ paths:
         "403":
           description: Forbidden - user is not an admin
       tags:
-        - User Administration
+        - Administration
   /updateMutableDescription:
     post:
       summary: Edit Mutable Description
