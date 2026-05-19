@@ -27,6 +27,10 @@ markdown_extensions:
 
 extra_css:
   - css/mkdocsoad.css
+  - css/toc-collapse.css
+
+extra_javascript:
+  - js/toc-collapse.js
 
 hooks:
   - hooks.py
