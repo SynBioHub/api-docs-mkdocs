@@ -1,0 +1,8 @@
+{% for example in handler.get_content_examples(definition) %}
+    {% if example.value %}
+    ```json
+    {{handler.write_content_example(example, content_type) | indent(4) | safe}}
+    ```
+    {% if example.auto_generated %}<span class="small-note">⚠️</span>&nbsp;<em class="small-note warning">This example has been generated automatically and is generic.</em>{% endif -%}
+    {% endif %}
+{% endfor %}

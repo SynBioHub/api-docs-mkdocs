@@ -2,13 +2,24 @@ site_name: SynBioHub API Docs
 
 theme:
   name: material
+  features:
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.progress
+    - navigation.tracking
+    - toc.integrate
+    - toc.follow
 
 plugins:
   - search
   - neoteroi.mkdocsoad:
       use_pymdownx: true
+      templates_path: docs/oad-templates
 
 markdown_extensions:
+  - toc:
+      permalink: true
+  - attr_list
   - pymdownx.details
   - pymdownx.superfences
   - pymdownx.tabbed:
@@ -17,10 +28,13 @@ markdown_extensions:
 extra_css:
   - css/mkdocsoad.css
 
+hooks:
+  - hooks.py
+
 nav:
   - Home: index.md
-  - Main API: openapi-main.md
-  - Plugins API: openapi-plugins.md
+  - Main API: openapi-main.generated.md
+  - Plugins API: openapi-plugins.generated.md
   - Guides:
       - Plugins: concepts/plugins.md
       - Remotes: concepts/remotes.md
