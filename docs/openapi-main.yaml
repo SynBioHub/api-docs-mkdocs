@@ -19,7 +19,15 @@ paths:
   /login:
     post:
       summary: "Login"
-      description: "Authenticates a user. Requires email (or username) and password. Returns a user token to be passed in the X-authorization header."
+      description: "This POST request requires email (or username)/password and returns a user token that should be passed in the X-authorization header to view private objects and submit new objects, etc."
+      parameters:
+        - name: Accept
+          in: header
+          description: Content type expected by the client, must be text/plain
+          required: true
+          schema:
+            type: string
+            default: text/plain
       requestBody:
         required: true
         content:
@@ -47,12 +55,18 @@ paths:
               example: "fb767104-6294-4d8b-9800-994f1076b1f1"
         "401":
           description: "Unauthorized - invalid credentials"
+          content:
+            text/plain:
+              schema:
+                type: string
+                enum:
+                  - "Your password was not recognized."
       tags:
-        - User Account
+        - User
   /logout:
     post:
       summary: "Logout"
-      description: "Logs out the user specified in the X-authorization header. Note that the actual controller endpoint is /do_logout."
+      description: "This post request logs out the user specified in the X-authorization header."
       security:
         - userToken: []
       responses:
@@ -61,7 +75,7 @@ paths:
         "401":
           description: "Unauthorized - invalid or missing token"
       tags:
-        - User Account
+        - User
   /register:
     post:
       summary: "Register"
@@ -77,12 +91,14 @@ paths:
                   type: string
                 name:
                   type: string
+                affiliation:
+                  type: string
                 email:
                   type: string
                   format: email
-                password:
+                password1:
                   type: string
-                affiliation:
+                password2:
                   type: string
               required:
                 - username
@@ -93,7 +109,8 @@ paths:
               username: "newuser"
               name: "New User"
               email: "user@example.org"
-              password: "password123"
+              password1: "password123"
+              password2: "password123"
               affiliation: "Example University"
       responses:
         "200":
@@ -101,7 +118,7 @@ paths:
         "400":
           description: "Bad request - invalid input or user already exists"
       tags:
-        - User Account
+        - User
   /resetPassword:
     post:
       summary: "Request Reset Password Token"
@@ -138,9 +155,9 @@ paths:
               properties:
                 token:
                   type: string
-                password:
+                password1:
                   type: string
-                passwordConfirm:
+                password2:
                   type: string
               required:
                 - token
@@ -2716,37 +2733,12 @@ components:
       name: X-authorization
       description: Authentication token with admin privileges
 tags:
-  - name: User Account
-  - name: Theme Administration
-  - name: Download
-  - name: Permission
-  - name: SBOLExplorer
-  - name: Remotes Management
-    description:
-      Manage connections to external repositories. See the [Remotes Guide](concepts/remotes.md)
-      for more details.
-    externalDocs:
-      description: Remotes Concept Guide
-      url: concepts/remotes.md
-  - name: Administration
-  - name: Registry Administration
-  - name: Registry Management
-  - name: Plugin Administration
-    description:
-      Manage SynBioHub plugins. See the [Plugins Guide](concepts/plugins.md)
-      for more details.
-    externalDocs:
-      description: Plugins Concept Guide
-      url: concepts/plugins.md
-  - name: Plugins
-    description:
-      Endpoints for interacting with SynBioHub plugins.
-    externalDocs:
-      description: Plugins Concept Guide
-      url: concepts/plugins.md
+  - name: User
   - name: Search
+  - name: Download
   - name: Submission
-  - name: Attachment
-  - name: Mail Administration
+  - name: Permission
   - name: Edit
-  - name: User Administration
+  - name: Attachment
+  - name: Administration
+  - name: Plugins
