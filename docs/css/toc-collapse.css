@@ -1,0 +1,37 @@
+.md-nav--secondary .md-nav__item.toc-collapsible > .md-nav,
+.md-nav--secondary .md-nav__item.toc-collapsible > .md-nav__list {
+    display: none;
+    margin-left: 0.8rem;
+}
+
+.md-nav--secondary .md-nav__item.toc-open > .md-nav,
+.md-nav--secondary .md-nav__item.toc-open > .md-nav__list {
+    display: block;
+}
+
+.md-nav--secondary .md-nav__item.toc-collapsible {
+    position: relative;
+    padding-right: 1.5rem;
+}
+
+.md-nav--secondary .toc-toggle {
+    position: absolute;
+    right: 0.1rem;
+    top: 0.2rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: none;
+    background: transparent;
+    color: var(--md-default-fg-color--light);
+    cursor: pointer;
+}
+
+.md-nav--secondary .toc-toggle::before {
+    content: "▸";
+    display: inline-block;
+    transition: transform 150ms ease;
+}
+
+.md-nav--secondary .md-nav__item.toc-open > .toc-toggle::before {
+    transform: rotate(90deg);
+}
